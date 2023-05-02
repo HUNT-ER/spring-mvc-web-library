@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add new people</title>
+</head>
+<body>
+<form method="post" action="/people" th:object="${person}">
+  <label for="person.name">Name:</label>
+  <input type="text" id="person.name" name="name" th:field="*{name}">
+  <div style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name_errors</div>
+  <br>
+  <label for="person.age">Age:</label>
+  <input type="text" id="person.age" name="age" th:field="*{age}">
+  <div style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">age_errors</div>
+  <br>
+  <input type="submit" value="Add">
+</form>
+<hr/>
+<form method="get" action="/people">
+  <input type="submit" value="Back">
+</form>
+</body>
+</html>

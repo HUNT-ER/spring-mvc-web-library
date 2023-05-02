@@ -33,7 +33,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 })
 @EnableWebMvc
 @EnableTransactionManagement
-@EnableJpaRepositories("org.boldyrev.weblibrary.models")
+@EnableJpaRepositories("org.boldyrev.weblibrary.repositories")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -93,12 +93,11 @@ public class SpringConfig implements WebMvcConfigurer {
         return properties;
     }
 
-
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource());
-        entityManager.setPackagesToScan("org.boldyrev.springmvc.models");
+        entityManager.setPackagesToScan("org.boldyrev.weblibrary.models");
 
         final HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManager.setJpaVendorAdapter(vendorAdapter);
@@ -112,6 +111,7 @@ public class SpringConfig implements WebMvcConfigurer {
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
+
 
 }
 

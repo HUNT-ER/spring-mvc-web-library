@@ -3,7 +3,9 @@ package org.boldyrev.weblibrary.services;
 import java.util.List;
 import java.util.Optional;
 import org.boldyrev.weblibrary.models.Book;
+import org.boldyrev.weblibrary.models.Person;
 import org.boldyrev.weblibrary.repositories.BooksRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,21 @@ public class BooksService {
     @Transactional(readOnly = true)
     public List<Book> finAll() {
         return booksRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> findAllByCurrentOwner(Person person) {
+        return booksRepository.findAllByCurrentOwner(person);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> findAllByCurrentOwner(Person person, Sort sort) {
+        return booksRepository.findAllByCurrentOwner(person, sort);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> findAllSorted(Sort sort) {
+        return booksRepository.findAll(sort);
     }
 
     @Transactional(readOnly = true)
@@ -40,6 +57,11 @@ public class BooksService {
     @Transactional
     public void delete(int id) {
         booksRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void releaseBook(int id) {
+        booksRepository.findById(id).get().setCurrentOwner(null);
     }
 
 }

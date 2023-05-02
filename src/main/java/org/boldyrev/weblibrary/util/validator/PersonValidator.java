@@ -27,9 +27,10 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-        Optional<Person> foundByEmailPerson = peopleRepository.findByEmailIgnoreCase(person.getEmail());
-        if (foundByEmailPerson.isPresent() && foundByEmailPerson.get().getId() != person.getId()) {
-            errors.rejectValue("email", "existed_email_error", "This email already taken");
+        Optional<Person> foundByNamePerson = peopleRepository.findByNameIgnoreCase(
+            person.getName());
+        if (foundByNamePerson.isPresent() && foundByNamePerson.get().getId() != person.getId()) {
+            errors.rejectValue("name", "existed_name_error", "This person already exists");
         }
     }
 }
