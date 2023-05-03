@@ -5,6 +5,11 @@
   <title>People</title>
 </head>
 <body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
 <div th:each="person : ${people}">
   <a th:href="@{/people/{id}(id=${person.getId()})}"
      th:text="${person.getName() + ', ' + person.getAge()}">person</a>

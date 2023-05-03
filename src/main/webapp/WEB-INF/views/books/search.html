@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Books search</title>
+</head>
+<body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
+<div>
+  <form method="get" action="/books/search">
+    <label for="search">Enter book title:</label>
+    <input type="text" id="search" name="book_title">
+    <br>
+    <input type="submit" value="Search">
+  </form>
+</div>
+<div th:if="${books}">
+  <br>
+  <hr/>
+  <div th:if="${books.size() > 0}" th:each="book : ${books}">
+    <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:text="${book.getTitle() + ', ' + book.getAuthor() + ', '
+        + book.getYear() + '(' + (book.getCurrentOwner() == null ? 'free' : 'assigned') + ')' }">finded_book</a>
+  </div>
+  <div th:if="${books.size() == 0}">
+    <p>Books not found</p>
+  </div>
+  <hr/>
+</div>
+<form method="get" action="/books">
+  <input type="submit" value="Back">
+</form>
+</body>
+</html>

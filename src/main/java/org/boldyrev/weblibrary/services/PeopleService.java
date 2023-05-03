@@ -25,6 +25,11 @@ public class PeopleService {
     }
 
     @Transactional(readOnly = true)
+    public List<Person> findAllSorted(Sort sort) {
+        return peopleRepository.findAll(sort);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Person> findById(int id) {
         return peopleRepository.findById(id);
     }

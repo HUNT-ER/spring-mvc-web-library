@@ -5,10 +5,15 @@
   <title th:text="${person.getName()}">Person name</title>
 </head>
 <body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
 <p th:text="${person.getName() + ', ' + person.getAge()}">Person</p>
 <hr/>
 <div th:if="${books.size() > 0}" th:each="book : ${books}">
-  <p style="color: gray" th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">Book</p>
+  <p th:style="${book.isExpired()} ? 'color: red' : 'color: gray'" th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">Book</p>
 </div>
 <div th:if="${books.size() == 0}">
   <p style="color: gray">Person has no books</p>

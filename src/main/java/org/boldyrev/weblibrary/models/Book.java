@@ -1,7 +1,9 @@
 package org.boldyrev.weblibrary.models;
 
-import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -50,11 +53,13 @@ public class Book {
     private int year;
 
     @Column(name = "assignation_date")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date assignationDate;
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
     private Person currentOwner;
 
+    @Transient
+    public boolean isExpired;
 }

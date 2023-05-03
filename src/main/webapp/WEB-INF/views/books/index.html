@@ -5,13 +5,35 @@
   <title>Books</title>
 </head>
 <body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
 <div th:each="book : ${books}">
   <a th:href="@{/books/{id}(id=${book.getId()})}"
      th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">Book name</a>
 </div>
+<br>
+<form method="get" action="/books">
+  <label for="bookview.page">Page:</label>
+  <input type="text" name="page" id="bookview.page">
+  <label for="bookview.size">Books per page:</label>
+  <input type="text" name="books_per_page" id="bookview.size">
+  <label for="bookview.sort">Sort by:</label>
+  <select id="bookview.sort" name="sort_by">
+    <option value="title">Title</option>
+    <option value="author">Author</option>
+    <option value="year">Year of production</option>
+  </select>
+  <input type="submit" value="Apply">
+</form>
 <hr/>
 <form method="get" action="/books/new">
   <input type="submit" value="Add book">
+</form>
+<form method="get" action="/books/search">
+  <input type="submit" value="Search book">
 </form>
 </body>
 </html>

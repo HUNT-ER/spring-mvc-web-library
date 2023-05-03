@@ -5,10 +5,16 @@
   <title th:text="${book.getTitle()}">Title</title>
 </head>
 <body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
 <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">Book</p>
 <hr/>
 <div th:if="${currentOwner}">
-  <p th:text="${'Book assigned to: ' + currentOwner.getName()}"></p>
+  <p th:style="${book.isExpired()} ? 'color: red' : 'color: gray'"
+     th:text="${'Book assigned to: ' + currentOwner.getName()}"></p>
   <form th:method="patch" th:action="@{/books/{id}/release(id=${book.getId()})}">
     <input type="submit" value="Release book">
   </form>
@@ -17,14 +23,16 @@
   <form th:method="patch" th:action="@{/books/{id}/assign(id=${book.getId()})}">
     <label for="person.select">Select person:</label>
     <select id="person.select" th:object="${owner}" th:field="*{id}">
-      <option th:each="person : ${people}" th:text="${person.getName()}" th:value="${person.getId()}">Person</option>
+      <option th:each="person : ${people}" th:text="${person.getName()}"
+              th:value="${person.getId()}">Person
+      </option>
     </select>
     <input type="submit" value="Assign book">
   </form>
 </div>
 <hr/>
 <form method="get" th:action="@{/books/{id}/edit(id=${book.getId()})}">
-  <input type = submit value="Edit book">
+  <input type=submit value="Edit book">
 </form>
 <form th:method="delete" th:action="@{/books/{id}(id=${book.getId()})}">
   <input type="submit" value="Delete book">

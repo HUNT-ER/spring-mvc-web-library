@@ -5,6 +5,11 @@
   <title>Add new people</title>
 </head>
 <body>
+<div style="color: gray">
+  <a href="/people">People</a>
+  <a href="/books">Books</a>
+</div>
+<hr/>
 <form method="post" action="/people" th:object="${person}">
   <label for="person.name">Name:</label>
   <input type="text" id="person.name" name="name" th:field="*{name}">

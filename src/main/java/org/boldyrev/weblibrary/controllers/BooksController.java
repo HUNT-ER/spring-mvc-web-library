@@ -1,5 +1,8 @@
 package org.boldyrev.weblibrary.controllers;
 
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import javax.validation.Valid;
 import org.boldyrev.weblibrary.models.Book;
 import org.boldyrev.weblibrary.models.Person;
@@ -33,9 +36,12 @@ public class BooksController {
     }
 
     @GetMapping
-    public String showBooks(@RequestParam(name = "page", required = false) Integer page,
-        @RequestParam(name = "books_per_page", required = false) Integer booksPerPage, Model model) {
-        model.addAttribute("books", booksService.findAllSorted(Sort.by("title")));
+    public String showBooks(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+        @RequestParam(name = "books_per_page", required = false, defaultValue = "0") Integer booksPerPage,
+        @RequestParam(name = "sort_by", required = false, defaultValue = "title") String sortBy, Model model) {
+
+        List<Book> books = booksService.findAll(page, booksPerPage, sortBy);
+        model.addAttribute("books", books);
 
         return "/books/index";
     }
@@ -62,11 +68,10 @@ public class BooksController {
         Book book = booksService.findById(id).get();
         model.addAttribute("book", book);
         if (book.getCurrentOwner() == null) {
-            model.addAttribute("people", peopleService.findAll());
+            model.addAttribute("people", peopleService.findAllSorted(Sort.by("name")));
         } else {
             model.addAttribute("currentOwner", book.getCurrentOwner());
         }
-
         return "/books/show";
     }
 
@@ -98,6 +103,7 @@ public class BooksController {
     public String assignBook(@ModelAttribute("owner") Person newOwner, @PathVariable("id") int id) {
         Book book = booksService.findById(id).get();
         book.setCurrentOwner(newOwner);
+        book.setAssignationDate(new Date());
         booksService.update(id, book);
 
         return "redirect:/books/{id}";
@@ -107,5 +113,14 @@ public class BooksController {
     public String releaseBook(@PathVariable("id") int id) {
         booksService.releaseBook(id);
         return "redirect:/books/{id}";
+    }
+
+    @GetMapping("/search")
+    public String searchBook(@RequestParam(name = "book_title", required = false) String title, Model model) {
+        if (title == null) {
+            return "/books/search";
+        }
+        model.addAttribute("books", booksService.searchBookByTitle(title));
+        return "/books/search";
     }
 }
