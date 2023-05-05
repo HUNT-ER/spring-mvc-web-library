@@ -2,8 +2,11 @@ package org.boldyrev.weblibrary.services;
 
 import java.util.List;
 import java.util.Optional;
+import org.boldyrev.weblibrary.models.Book;
 import org.boldyrev.weblibrary.models.Person;
 import org.boldyrev.weblibrary.repositories.PeopleRepository;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,14 @@ public class PeopleService {
     public Optional<Person> findByEmail(String name) {
         return peopleRepository.findByNameIgnoreCase(name);
     }
+
+    @Transactional(readOnly = true)
+    public Person findWithBooksById(int id) {
+        Person person = peopleRepository.findById(id).get();
+        Hibernate.initialize(person.getBooks());
+        return person;
+    }
+
 
     @Transactional
     public void save(Person person) {

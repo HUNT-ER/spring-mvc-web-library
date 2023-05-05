@@ -29,11 +29,6 @@ public class BooksService {
     }
 
     @Transactional(readOnly = true)
-    public List<Book> findAllByCurrentOwner(Person person) {
-        return booksRepository.findAllByCurrentOwner(person);
-    }
-
-    @Transactional(readOnly = true)
     public List<Book> findAllByCurrentOwner(Person person, Sort sort) {
         return booksRepository.findAllByCurrentOwner(person, sort).stream()
             .peek(book -> setExpired(book)).collect(Collectors.toList());

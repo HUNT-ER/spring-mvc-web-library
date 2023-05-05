@@ -1,14 +1,10 @@
 package org.boldyrev.weblibrary.controllers;
 
-import java.util.List;
 import javax.validation.Valid;
-import org.boldyrev.weblibrary.models.Book;
 import org.boldyrev.weblibrary.models.Person;
-import org.boldyrev.weblibrary.services.BooksService;
 import org.boldyrev.weblibrary.services.PeopleService;
 import org.boldyrev.weblibrary.util.validator.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,14 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PeopleController {
 
     private final PeopleService peopleService;
-    private final BooksService booksService;
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, BooksService booksService,
-        PersonValidator personValidator) {
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
         this.peopleService = peopleService;
-        this.booksService = booksService;
         this.personValidator = personValidator;
     }
 
@@ -62,9 +55,9 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
-        Person person = peopleService.findById(id).get();
+        Person person = peopleService.findWithBooksById(id);
         model.addAttribute("person", person);
-        model.addAttribute("books", booksService.findAllByCurrentOwner(person, Sort.by("title")));
+        model.addAttribute("books", person.getBooks());
         return "/people/show";
     }
 
@@ -75,7 +68,8 @@ public class PeopleController {
     }
 
     @PatchMapping("/{id}")
-    public String saveEditedPerson(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+    public String saveEditedPerson(@ModelAttribute("person") @Valid Person person,
+        BindingResult bindingResult,
         @PathVariable("id") int id) {
         personValidator.validate(person, bindingResult);
 
